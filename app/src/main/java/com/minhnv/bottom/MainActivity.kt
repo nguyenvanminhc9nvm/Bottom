@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -50,9 +51,15 @@ class MainActivity : AppCompatActivity(),BlockDrawer {
             val appBarConfiguration = AppBarConfiguration(navController.graph,drawar_layout)
             NavigationUI.setupWithNavController(toolbar,navController,appBarConfiguration)
             NavigationUI.setupWithNavController(navigation_view,navController)
+            navController.addOnDestinationChangedListener { nc: NavController, nd: NavDestination, args: Bundle? ->
+                if (nd.id == nc.graph.startDestination) {
+                    drawar_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                } else {
+                    drawar_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                }
+            }
             btnMenu.setOnClickListener {
                 navController.navigate(R.id.action_homeFragment_to_secondFragment)
-                drawar_layout.closeDrawers()
             }
         })
         currentNavController = controller
